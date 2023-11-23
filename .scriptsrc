@@ -1,0 +1,161 @@
+# eval "$(starship init bash)"
+# colors to use on the terminal.
+
+#/home/korn/
+
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export PATH="$HOME/.phpenv/bin:$PATH"
+eval "$(phpenv init -)"
+
+export PATH="$HOME/android/android-studio/bin:$PATH"
+
+export GOBIN=~/go/bin
+export PATH=$PATH:$GOBIN
+
+YELLOW='\u001b[38;5;227m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+GRAY='\033[1;30m'
+BOLD='\033[1m'
+NOTBOLD='\033[0m'
+NC='\033[0m'
+CL='\033[K'
+BOLDRED='\033[1m\033[0;31m'
+BOLDGREEN='\033[1m\033[0;32m'
+
+
+
+function editbash(){
+    code ~/.bashrc ~/.scriptsrc ~/.zshrc
+}
+
+function setpath(){
+    echo "$(pwd)" | base64 > ~/.path
+}
+
+function getpath(){
+    cd $(cat ~/.path | base64 --decode)
+}
+
+function whichpath(){
+  echo `cat ~/.path | base64 --decode`
+}
+
+function mkcddir() {
+    mkdir $1
+    if [ $? -eq 0 ]; then
+        cd $1
+    else
+        echo -e "${RED}${BOLD}Couldn't create directory."
+    fi
+}
+
+function set-alias(){
+	set-alias code. code .
+	echo "alias $1='$2'" >> $HOME/.scriptsrc
+	sourcebash
+}
+
+function setmvm(){
+    if [ ! -d "$1" ]; then
+        echo "Directory does not exist"
+        return
+    fi
+    IS_MVM_SET=1
+    MVMPWD="$1"
+    FILE_EXTENSION="$2"
+}
+
+function getmvm(){
+    echo "The extension is set to: $FILE_EXTENSION"
+    echo "The path is set to: $MVMPWD"
+}
+
+function setmvmpath(){
+    MVMPWD="$(dirname /home/korn/Desktop/Personal/laravel/proposal)"/$1""
+}
+
+function mvm(){
+    if [[ $IS_MVM_SET != 1 ]]
+    then
+        echo "Function not prepared to run"
+        return
+    fi
+    if [ ! -f "$1.$FILE_EXTENSION" ]; then
+        echo "$BOLDRED File does not exist in current directory$CL"
+        return
+    fi
+    mv "$1.$FILE_EXTENSION" $MVMPWD
+}
+
+function sgt(){
+    echo $1 > $HOME/.gittagversion
+    git tag $1
+}
+
+function ggt(){
+    git tag $(cat $HOME/.gittagversion)
+}
+
+function pgt(){
+    git push origin $(cat $HOME/.gittagversion)
+}
+
+function CLEAR(){
+    xdotool key Caps_Lock;
+    clear;
+}
+
+function mkjava() {
+    TARGET=$1
+    javac $1
+}
+
+function rjava(){
+    java $TARGET
+}
+
+alias gt="getpath"
+alias st="setpath"
+alias projects="cd $HOME/projects/"
+alias project="projects"
+alias sbash="sourcebash"
+alias ..='cd ..'
+alias mkcd="mkcddir"
+alias restartsite="bash $HOME/projects/site-yooga/kubernetes/run.sh"
+alias dashboard="cd $HOME/projects/dashboard_admin/ && yarn dev"
+alias dr='docker compose up --build -d -V'
+alias dl='docker container logs --tail 100 -f '
+alias www="cd $HOME/projects"
+alias herologs='heroku logs -t -a whatsapp-bot-agendor'
+alias whatsapp="cd $HOME/projects/whatsapp-bot-agendor"
+alias junk="cd $HOME/projects/junk/"
+alias app-payment="www && cd angular-customer-payment; yarn start"
+alias customers-front="www; cd angular-customers; yarn start"
+alias ll='exa -al'
+alias yooga-core='www && cd nest-integrations'
+alias app-yooga='yooga-core'
+alias core='yooga-core'
+alias windows='cd /media/korn/Acer'
+alias code.='code .'
+alias py='python3'
+alias pagamento='www; cd angular-customer-payment; npm run start'
+alias automacao='www; cd automacao-galaxpay; mvn quarkus:dev' 
+alias dash='dashboard'
+alias pagamentos='pagamento'
+alias laravel='www; cd laravel-customers; PROJECT=laravel'
+alias app='yooga-core; PROJECT=app'
+alias customers="cd $HOME/projects/nestjs-customers; PROJECT=customers"
+alias fullcycle="cd $HOME/projects/fullcycle"
+alias kube="kubectl"
+alias air='/home/korn/go/bin/air'
+alias nv='nvim'
+alias n='nvim'
+alias v='nvim'
+alias pn='pnpm'
+alias xdg='xdg-open'
+alias nwlf='www && cd nwlf'
+alias v.='v .'
